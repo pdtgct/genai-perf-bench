@@ -181,14 +181,6 @@ def split_text_by_tokens_chat(
         if prev_end == curr_start or text[prev_end:curr_start].isspace():
             valid_starts.append(i)
 
-    # Precompute system prompt tokens
-    if hasattr(tokenizer, "apply_chat_template"):
-        system_tokens = len(tokenizer(tokenizer.apply_chat_template(
-            [{"role": "system", "content": system_prompt}], tokenize=False
-        )).input_ids)
-    else:
-        system_tokens = len(tokenizer(system_prompt, add_special_tokens=False).input_ids)
-
     for i in range(num_samples):
         start_idx = valid_starts[(i * (prompt_size // 2)) % len(valid_starts)]
         # Find the chunk of user tokens that, when combined with system prompt, is as close as possible to prompt_size
